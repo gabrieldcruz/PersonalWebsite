@@ -6,7 +6,7 @@
   import { goto } from '$app/navigation';
   import { usePortfolioExperience } from '$lib/portfolioExperience';
   import { attachMenuWheel } from '$lib/menuWheel';
-  import { options, profile, projects, skillGroups, externalLink, resumeLink, emailLink, phoneLink, type ChapterId } from '$lib/portfolio';
+  import { options, profile, externalLink, resumeLink, emailLink, phoneLink, type ChapterId } from '$lib/portfolio';
 
   let active = $state(0);
   let opened = $state<ChapterId | null>(null);
@@ -68,8 +68,8 @@
   }
   async function openChapter(id: ChapterId) {
     playTone('confirm');
-    if (id === 'about') {
-      await goto('/about');
+    if (id === 'about' || id === 'projects' || id === 'skills') {
+      await goto(`/${id}`);
       return;
     }
     opened = id;
@@ -107,11 +107,12 @@
   <main class="menu-area">
     <nav class="pause-menu" aria-label="Portfolio navigation">
       {#each options as option, i}
+        {@const chapterHref = option.id === 'about' || option.id === 'projects' || option.id === 'skills' ? `/${option.id}` : undefined}
         <div class="option-wrap" class:active={active === i} style={`--angle:${option.rotation}deg;--offset:${option.offsetX}px;--lift:${option.offsetY}px;--order:${i};z-index:${option.zIndex}`}>
-          <svelte:element this={option.id === 'about' ? 'a' : 'button'} bind:this={controls[i]} role={option.id === 'about' ? 'link' : 'button'}
-            href={option.id === 'about' ? '/about' : undefined} type={option.id === 'about' ? undefined : 'button'} class="menu-option" class:selected={active === i}
-            aria-label={option.name} aria-haspopup={option.id === 'about' ? undefined : 'dialog'} aria-expanded={option.id === 'about' ? undefined : opened === option.id} onmouseenter={() => select(i)} onfocus={() => select(i)}
-            onkeydown={(event: KeyboardEvent) => navigate(event, i)} onclick={() => option.id === 'about' ? playTone('confirm') : openChapter(option.id)}>
+          <svelte:element this={chapterHref ? 'a' : 'button'} bind:this={controls[i]} role={chapterHref ? 'link' : 'button'}
+            href={chapterHref} type={chapterHref ? undefined : 'button'} class="menu-option" class:selected={active === i}
+            aria-label={option.name} aria-haspopup={chapterHref ? undefined : 'dialog'} aria-expanded={chapterHref ? undefined : opened === option.id} onmouseenter={() => select(i)} onfocus={() => select(i)}
+            onkeydown={(event: KeyboardEvent) => navigate(event, i)} onclick={() => chapterHref ? playTone('confirm') : openChapter(option.id)}>
             <MenuLabel label={option.name} index={i} selected={active === i} />
           </svelte:element>
         </div>
@@ -136,23 +137,7 @@
     <div class="dossier-header"><span>PORTFOLIO / {openedOption?.name ?? ''}</span><button class="close-button" onclick={closeChapter} aria-label="Close chapter">BACK <kbd>Esc</kbd></button></div>
     <div class="dossier-content">
       <div class="dossier-heading"><span class="dossier-kicker">GABRIEL CRUZ / PERSONAL FILE</span><h2 id="dossier-title">{openedOption?.name ?? ''}<span>.</span></h2></div>
-      {#if opened === 'projects'}
-        <p class="body-copy">Web applications, automation, and things that interact with the physical world.</p>
-        <div class="project-files">
-          {#each projects as project, i}
-            <details class="project-file" open={i === 0}>
-              <summary><span class="file-index">0{i + 1}</span><div><span class="file-category">{project.category}</span><h3>{project.name}</h3></div><span class="file-expand" aria-hidden="true">+</span></summary>
-              <div class="file-body"><p>{project.summary}</p><ul>{#each project.features as feature}<li>{feature}</li>{/each}</ul><div class="tag-list">{#each project.stack as tag}<span>{tag}</span>{/each}</div>
-                {#if externalLink(project.github)}<a class="text-link" href={externalLink(project.github)} target="_blank" rel="noopener noreferrer">View code</a>{/if}
-                {#if externalLink(project.demo)}<a class="text-link" href={externalLink(project.demo)} target="_blank" rel="noopener noreferrer">Open demo</a>{/if}
-              </div>
-            </details>
-          {/each}
-        </div>
-      {:else if opened === 'skills'}
-        <p class="body-copy">The languages and tools I've used across software and hardware projects.</p>
-        <div class="skill-groups">{#each skillGroups as group, i}<section class="skill-group"><span class="skill-number">0{i + 1}</span><div><span class="file-category">{group.note}</span><h3>{group.name}</h3><div class="tag-list">{#each group.items as item}<span>{item}</span>{/each}</div></div></section>{/each}</div>
-      {:else if opened === 'resume'}
+      {#if opened === 'resume'}
         <p class="lead">{profile.name}</p><p class="body-copy">{profile.degree}<br />{profile.school}</p>
         <dl class="profile-grid"><div><dt>FOCUS</dt><dd>Software engineering<br />Systems & embedded development</dd></div><div><dt>PROJECT EXPERIENCE</dt><dd>Django web applications<br />Python automation<br />ESP32 prototypes</dd></div></dl>
         {#if resumeUrl}<a class="solid-button" href={resumeUrl} target="_blank" rel="noopener noreferrer">Open resume PDF</a>{:else}<div class="empty-link"><span>RESUME PDF</span><p>A downloadable resume hasn't been added yet.</p></div>{/if}

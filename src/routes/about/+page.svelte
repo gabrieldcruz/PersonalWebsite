@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { onMount, tick } from 'svelte';
-  import { profile } from '$lib/portfolio';
+  import { externalLink, profile } from '$lib/portfolio';
   import { usePortfolioExperience } from '$lib/portfolioExperience';
   import { attachMenuWheel } from '$lib/menuWheel';
 
@@ -51,7 +51,7 @@
 
 <svelte:head>
   <title>About Me — {profile.name}</title>
-  <meta name="description" content={`${profile.name} — Computer Science and Mathematics at Georgia Tech. My background and interests.`} />
+  <meta name="description" content={`${profile.name} — ${profile.intro} My background and interests.`} />
 </svelte:head>
 
 <svelte:window onkeydown={handleKey} />
@@ -95,6 +95,14 @@
             <p class="detail-kicker">PERSONAL FILE <span>／ {selected.number}</span></p>
             <h2>{selected.label}</h2>
             <p class="section-summary">{selected.summary}</p>
+            {#if selected.id === 'profile' && externalLink(profile.github)}
+              <a class="github-link" href={externalLink(profile.github)} target="_blank" rel="noopener noreferrer" onclick={() => experience.playTone('confirm')}>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                  <path d="M12 .75a11.25 11.25 0 0 0-3.56 21.92c.56.1.77-.24.77-.54v-2.1c-3.14.68-3.8-1.33-3.8-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.64 1.22 3.28.94.1-.73.39-1.22.71-1.5-2.5-.29-5.13-1.25-5.13-5.56 0-1.23.44-2.24 1.16-3.03-.12-.29-.5-1.44.11-3 0 0 .95-.3 3.09 1.16a10.7 10.7 0 0 1 5.62 0c2.15-1.46 3.09-1.16 3.09-1.16.62 1.56.23 2.71.12 3 .72.79 1.15 1.8 1.15 3.03 0 4.32-2.63 5.27-5.14 5.55.4.35.76 1.04.76 2.09v3.08c0 .3.2.65.78.54A11.25 11.25 0 0 0 12 .75Z" />
+                </svg>
+                <span>Open on GitHub <span aria-hidden="true">↗</span></span>
+              </a>
+            {/if}
             {#if selected.id === 'background'}
               <p class="detail-meta">{profile.internshipDates} <span>／</span> {profile.internshipLocation}</p>
             {/if}
@@ -153,6 +161,10 @@
   .detail-kicker span { color: #ff84dc; }
   h2 { font: italic 900 clamp(32px, 4.2vw, 58px)/.96 var(--display); color: #4cf4fc; margin: 0; letter-spacing: -.02em; }
   .section-summary { margin: 12px 0 0; max-width: 610px; color: #f0f9ff; font-size: clamp(13px, 1.25vw, 18px); line-height: 1.65; }
+  .github-link { display: inline-flex; align-items: center; gap: 8px; min-height: 28px; margin-top: 12px; color: #d1ffff; font-size: 12px; font-weight: 700; border-bottom: 1px solid #55ebff; }
+  .github-link svg { flex-shrink: 0; }
+  .github-link:hover { color: white; border-color: #ff6bd5; }
+  .github-link:focus-visible { outline: 2px solid #ff6bd5; outline-offset: 4px; }
   .detail-meta { font-size: 10px; color: #9dddff; letter-spacing: .5px; margin: 11px 0 0; }
   .detail-meta span { color: #ff6bd5; padding: 0 5px; }
   .about-footer { display: flex; justify-content: flex-end; min-width: 0; padding: 10px 4% 18px 260px; min-height: max(54px, calc(var(--shared-controls-height, 28px) + 26px)); }
@@ -211,6 +223,7 @@
     .section-summary { font-size: 12px; margin-top: 8px; }
     .detail-kicker { font-size: 8px; margin-bottom: 6px; }
     .detail-meta { margin-top: 8px; }
+    .github-link { margin-top: 7px; min-height: 24px; font-size: 11px; }
   }
   @media (max-width: 360px) {
     .category { font-size: 20px; }
@@ -252,6 +265,7 @@
     h2 { font-size: 29px; }
     .section-summary { font-size: 11.5px; margin-top: 6px; line-height: 1.45; }
     .detail-meta { margin-top: 5px; font-size: 8px; }
+    .github-link { margin-top: 5px; min-height: 22px; font-size: 10px; }
     .about-footer { padding-top: 5px; padding-bottom: 10px; }
     .guide p { display: none; }
     .guide-controls { font-size: 15px; }
