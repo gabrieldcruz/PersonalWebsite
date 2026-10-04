@@ -1,0 +1,15 @@
+node_modules/
+.svelte-kit/
+.vercel/
+build/
+dist/
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# This project uses the npm lockfile.
+/bun.lock
+
+# Accidental nested repository; the site lives at the repository root.
+/Personal Website/
