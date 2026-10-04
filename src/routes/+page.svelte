@@ -1,29 +1,23 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte';
+  import { onMount } from 'svelte';
   import TriangleBackground from '$lib/TriangleBackground.svelte';
   import VideoBackground from '$lib/VideoBackground.svelte';
   import MenuLabel from '$lib/MenuLabel.svelte';
   import { goto } from '$app/navigation';
   import { usePortfolioExperience } from '$lib/portfolioExperience';
   import { attachMenuWheel } from '$lib/menuWheel';
-  import { options, profile, externalLink, resumeLink, emailLink, phoneLink, type ChapterId } from '$lib/portfolio';
+  import { options, profile, type ChapterId } from '$lib/portfolio';
 
   let active = $state(0);
-  let opened = $state<ChapterId | null>(null);
-  let dialog: HTMLDialogElement;
-  let controls: HTMLElement[] = [];
+  let controls: HTMLAnchorElement[] = [];
   let dateLabel = $state('PERSONAL');
   let dayLabel = $state('PORTFOLIO');
   const experience = usePortfolioExperience();
   const reducedMotion = $derived(experience.state.reducedMotion);
   const { playTone } = experience;
-  let previousOverflow = '';
   const selected = $derived(options[active]);
-  const openedOption = $derived(options.find(option => option.id === opened));
-  const resumeUrl = resumeLink(profile.resume);
 
   onMount(() => {
-    previousOverflow = document.body.style.overflow;
     const updateDate = () => {
       const now = new Date();
       dateLabel = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' });
@@ -31,11 +25,10 @@
     };
     updateDate();
     const timer = window.setInterval(updateDate, 60000);
-    const removeWheel = attachMenuWheel(direction => select((active + direction + options.length) % options.length), () => opened === null);
+    const removeWheel = attachMenuWheel(direction => select((active + direction + options.length) % options.length));
     return () => {
       clearInterval(timer);
       removeWheel();
-      document.body.style.overflow = previousOverflow;
     };
   });
 
@@ -57,7 +50,7 @@
     controls[next]?.focus();
   }
   function navigateFromPage(event: KeyboardEvent) {
-    if (opened || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
     const target = event.target;
     if (target instanceof Element && target.closest('button, a, input, textarea, select, [contenteditable="true"]')) return;
     if (event.key === 'Enter') {
@@ -68,21 +61,7 @@
   }
   async function openChapter(id: ChapterId) {
     playTone('confirm');
-    if (id === 'about' || id === 'projects' || id === 'skills') {
-      await goto(`/${id}`);
-      return;
-    }
-    opened = id;
-    await tick();
-    if (!dialog.open) dialog.showModal();
-    dialog.scrollTop = 0;
-    document.body.style.overflow = 'hidden';
-  }
-  function closeChapter() { dialog.close(); }
-  function didClose() {
-    playTone('back');
-    opened = null;
-    document.body.style.overflow = previousOverflow;
+    await goto(`/${id}`);
   }
 </script>
 
@@ -94,9 +73,9 @@
 </svelte:head>
 
 <div class="reload-shell" class:reduce-motion={reducedMotion}>
-  <VideoBackground {reducedMotion} paused={opened !== null} />
+  <VideoBackground {reducedMotion} />
   <div class="art-shade" aria-hidden="true"></div>
-  <TriangleBackground {active} {reducedMotion} paused={opened !== null} />
+  <TriangleBackground {active} {reducedMotion} />
   <div class="side-counter" aria-hidden="true">0{active + 1}</div>
   <div class="screen-texture" aria-hidden="true"></div>
 
@@ -107,14 +86,12 @@
   <main class="menu-area">
     <nav class="pause-menu" aria-label="Portfolio navigation">
       {#each options as option, i}
-        {@const chapterHref = option.id === 'about' || option.id === 'projects' || option.id === 'skills' ? `/${option.id}` : undefined}
         <div class="option-wrap" class:active={active === i} style={`--angle:${option.rotation}deg;--offset:${option.offsetX}px;--lift:${option.offsetY}px;--order:${i};z-index:${option.zIndex}`}>
-          <svelte:element this={chapterHref ? 'a' : 'button'} bind:this={controls[i]} role={chapterHref ? 'link' : 'button'}
-            href={chapterHref} type={chapterHref ? undefined : 'button'} class="menu-option" class:selected={active === i}
-            aria-label={option.name} aria-haspopup={chapterHref ? undefined : 'dialog'} aria-expanded={chapterHref ? undefined : opened === option.id} onmouseenter={() => select(i)} onfocus={() => select(i)}
-            onkeydown={(event: KeyboardEvent) => navigate(event, i)} onclick={() => chapterHref ? playTone('confirm') : openChapter(option.id)}>
+          <a bind:this={controls[i]} href={`/${option.id}`} class="menu-option" class:selected={active === i}
+            aria-label={option.name} onmouseenter={() => select(i)} onfocus={() => select(i)}
+            onkeydown={(event: KeyboardEvent) => navigate(event, i)} onclick={() => playTone('confirm')}>
             <MenuLabel label={option.name} index={i} selected={active === i} />
-          </svelte:element>
+          </a>
         </div>
       {/each}
     </nav>
@@ -133,23 +110,4 @@
     </footer>
   </div>
 
-  <dialog bind:this={dialog} class="dossier" aria-labelledby="dossier-title" onclose={didClose}>
-    <div class="dossier-header"><span>PORTFOLIO / {openedOption?.name ?? ''}</span><button class="close-button" onclick={closeChapter} aria-label="Close chapter">BACK <kbd>Esc</kbd></button></div>
-    <div class="dossier-content">
-      <div class="dossier-heading"><span class="dossier-kicker">GABRIEL CRUZ / PERSONAL FILE</span><h2 id="dossier-title">{openedOption?.name ?? ''}<span>.</span></h2></div>
-      {#if opened === 'resume'}
-        <p class="lead">{profile.name}</p><p class="body-copy">{profile.degree}<br />{profile.school}</p>
-        <dl class="profile-grid"><div><dt>FOCUS</dt><dd>Software engineering<br />Systems & embedded development</dd></div><div><dt>PROJECT EXPERIENCE</dt><dd>Django web applications<br />Python automation<br />ESP32 prototypes</dd></div></dl>
-        {#if resumeUrl}<a class="solid-button" href={resumeUrl} target="_blank" rel="noopener noreferrer">Open resume PDF</a>{:else}<div class="empty-link"><span>RESUME PDF</span><p>A downloadable resume hasn't been added yet.</p></div>{/if}
-      {:else if opened === 'links'}
-        <p class="lead">Let's make something worth building.</p><p class="body-copy">Find my code, connect professionally, or get in touch.</p>
-        <div class="link-list">
-          {#each [{ name: 'GitHub', sub: 'Code & experiments', href: externalLink(profile.github) }, { name: 'LinkedIn', sub: 'Professional profile', href: externalLink(profile.linkedin) }, { name: 'Email', sub: 'Start a conversation', href: emailLink(profile.email) }, { name: 'Phone', sub: profile.phone, href: phoneLink(profile.phone) }] as link}
-            {#if link.href}<a href={link.href} target={link.name === 'Phone' ? undefined : '_blank'} rel="noopener noreferrer" class="link-row"><div><h3>{link.name}</h3><span>{link.sub}</span></div><span>OPEN</span></a>{:else}<div class="link-row unavailable"><div><h3>{link.name}</h3><span>{link.sub}</span></div><span>COMING SOON</span></div>{/if}
-          {/each}
-        </div>
-      {/if}
-    </div>
-    <div class="dossier-footer"><span>KEEP EXPLORING.</span><button onclick={closeChapter}>Return to menu</button></div>
-  </dialog>
 </div>

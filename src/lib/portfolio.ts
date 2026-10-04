@@ -28,7 +28,7 @@ export const profile = {
   interests: 'I enjoy watching soccer and football, playing basketball, doing puzzles, and listening to music.',
   phone: '240-810-4092',
   github: 'https://github.com/gabrieldcruz',
-  linkedin: '',
+  linkedin: 'https://www.linkedin.com/in/gcruz38/',
   email: 'gabriel.david.cruz12@gmail.com',
   resume: '', // Add a file to static/resume.pdf, then set this to '/resume.pdf'.
 };
