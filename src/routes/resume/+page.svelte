@@ -43,7 +43,7 @@
 
 <svelte:head>
   <title>Resumes — {profile.name}</title>
-  <meta name="description" content="Gabriel Cruz’s general technical and firmware resumes. View or download the version that fits your role." />
+  <meta name="description" content="Gabriel Cruz’s software, general technical, and firmware resumes. View or download the version that fits your role." />
 </svelte:head>
 
 <svelte:window onkeydown={handleKey} />
@@ -74,7 +74,7 @@
           </button>
         {/each}
       </div>
-      <div class="owner-note"><span>GABRIEL CRUZ</span><p>Georgia Tech <i>／</i> CS + Mathematics</p><small>Two perspectives on the work I build.</small></div>
+      <div class="owner-note"><span>GABRIEL CRUZ</span><p>Georgia Tech <i>／</i> CS + Mathematics</p><small>Three perspectives on the work I build.</small></div>
     </section>
 
     <section class="resume-detail" id="resume-details" aria-labelledby="resume-title">

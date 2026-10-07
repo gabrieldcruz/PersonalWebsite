@@ -3,6 +3,81 @@ import type { Project } from './portfolio';
 // Story answers are editable technical drafts inferred from repository code.
 // Confirm personal motivation and the hardest experience before treating them as final.
 export const projectDetails: Record<string, Pick<Project, 'stack' | 'story' | 'media'>> = {
+  "wisp": {
+    "stack": [
+      "Java",
+      "Spring Boot",
+      "Redis",
+      "ClickHouse",
+      "MySQL",
+      "React",
+      "Docker",
+      "JUnit",
+      "Testcontainers",
+      "GitHub Actions"
+    ],
+    "story": {
+      "reason": "Build web analytics that counts visitors without cookies or stored IP addresses, using a daily-rotating salted hash so no one can be followed across days.",
+      "challenge": "Count every event exactly once on top of at-least-once Redis Streams delivery. Batch deduplication tokens in ClickHouse, sealed retry batches, and crash-injection integration tests keep the rollups correct.",
+      "improvement": "Deploy it publicly, add funnels and custom events, and load-test the ingest path with multiple workers."
+    },
+    "media": []
+  },
+  "cosmillion": {
+    "stack": [
+      "Python",
+      "Django",
+      "Django REST Framework",
+      "PostgreSQL",
+      "SvelteKit",
+      "TypeScript",
+      "Docker",
+      "AWS",
+      "GitHub Actions",
+      "pytest",
+      "Playwright"
+    ],
+    "story": {
+      "reason": "Turn Krillion's rare-answers-score-more idea into a space game: 703 prompts built from Wikidata, with fuel based on Wikipedia pageviews, plus party rooms and a daily challenge.",
+      "challenge": "Keep timed party rounds synchronized and consistent under concurrent answers, using PostgreSQL constraints and ordered row locks. Load tests also traced a CPU bottleneck to per-request database connections; fixing it gave +69% throughput and 42% lower median latency.",
+      "improvement": "Replace party polling with WebSockets, grow the question bank, and add accounts so streaks follow players across devices."
+    },
+    "media": [
+      {
+        "kind": "image",
+        "src": "/projects/cosmillion-launch.jpg",
+        "alt": "Cosmillion launch screen with Begin launch, Play with friends, and Daily challenge buttons",
+        "caption": "The Cosmillion launch pad, captured from the live site."
+      },
+      {
+        "kind": "image",
+        "src": "/projects/cosmillion-flight.jpg",
+        "alt": "Pixel rocket climbing past Venus after an answer",
+        "caption": "An answer lands and the rocket climbs past real solar-system distances."
+      },
+      {
+        "kind": "image",
+        "src": "/projects/cosmillion-result.jpg",
+        "alt": "Cosmillion result card showing a one-in-a-million answer and topic choices",
+        "caption": "A Cosmillion-tier answer: rare picks burn more fuel and charge a boost."
+      }
+    ]
+  },
+  "cpu-scheduler": {
+    "stack": [
+      "C",
+      "pthreads",
+      "Linux",
+      "Make",
+      "GDB"
+    ],
+    "story": {
+      "reason": "Implement the scheduling policies from my operating systems course inside a multiprocessor OS simulator: FCFS, Round Robin, SRTF, and preemptive priority.",
+      "challenge": "Run one thread per simulated CPU while protecting the shared ready queue and per-CPU state with mutexes and condition variables, so idle CPUs block instead of spinning.",
+      "improvement": "Add aging to prevent starvation under priority scheduling and compare policies across more workloads."
+    },
+    "media": []
+  },
   "aimockinterviewer": {
     "stack": [
       "React",
@@ -193,8 +268,8 @@ export const projectDetails: Record<string, Pick<Project, 'stack' | 'story' | 'm
       "Web Audio API"
     ],
     "story": {
-      "reason": "Create a game-inspired portfolio where visitors explore my background, skills, and projects through an interactive menu.",
-      "challenge": "Keep the visual style responsive while supporting keyboard navigation, reduced motion, and consistent audio controls.",
+      "reason": "Create a game-inspired portfolio where visitors explore my background, skills, and projects through an interactive menu, with typed TypeScript models powering each project case study.",
+      "challenge": "Keep the visual style responsive while supporting keyboard controls, modal focus restoration, and reduced motion. Menu sounds are synthesized with Web Audio oscillators and gain envelopes, unlocked by a user gesture and throttled.",
       "improvement": "Optimize video and music loading, refine page metadata, and test navigation with assistive technology."
     },
     "media": [

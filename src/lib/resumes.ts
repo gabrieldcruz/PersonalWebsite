@@ -16,7 +16,27 @@ export interface ResumeFile {
 // General: the user-provided Downloads/resume (2).pdf.
 // Firmware: Gabriel_Cruz_v2.pdf, created October 1, 2026 (local time).
 // The newer firmware version includes MATLAB/Simulink and the FPGA logic project.
+// Software: Gabriel_Cruz_SWE_Resume.pdf, added October 7, 2026.
 export const resumes: ResumeFile[] = [
+  {
+    id: 'software',
+    name: 'Software Resume',
+    role: 'Backend, full-stack & systems',
+    monogram: 'SW',
+    accent: '#46e3c6',
+    summary: 'Backend and full-stack engineering: a privacy-friendly analytics pipeline, a multiplayer trivia game on AWS, and a multithreaded CPU scheduler.',
+    focus: 'Backend, full-stack & systems',
+    highlights: [
+      { label: 'Focus', value: 'Backend, full-stack & systems' },
+      { label: 'Education', value: 'Georgia Tech · CS + Mathematics' },
+      { label: 'Experience', value: 'Johns Hopkins APL · Engineering intern' },
+      { label: 'Tools', value: 'Spring Boot · Django · Redis · AWS' },
+      { label: 'Projects', value: 'Wisp · Cosmillion · CPU scheduler' }
+    ],
+    src: '/resumes/software-resume.pdf',
+    preview: '/resumes/software-resume-preview.jpg',
+    filename: 'Gabriel_Cruz_SWE_Resume.pdf'
+  },
   {
     id: 'general',
     name: 'General Resume',

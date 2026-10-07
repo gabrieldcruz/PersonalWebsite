@@ -19,10 +19,10 @@ export const profile = {
   degree: 'Double Major in Computer Science and Mathematics',
   year: 'Junior',
   expectedGraduation: '2028',
-  focus: 'Software engineering / Systems / Embedded',
+  focus: 'Backend / Full-stack / Systems',
   intro: 'Double majoring in Computer Science and Mathematics at the Georgia Institute of Technology.',
   bio: 'Hey — I’m Gabriel Cruz. I’m double majoring in Computer Science and Mathematics at the Georgia Institute of Technology, and I enjoy building things that challenge me.',
-  background: 'I interned at Johns Hopkins Applied Physics Laboratory, where I explored wireless technology and worked on projects connecting hardware and software.',
+  background: 'I interned at Johns Hopkins Applied Physics Laboratory, where I led small teams building wireless power transfer and impedance spectroscopy prototypes. Since then I’ve focused on backend and systems work: a privacy-friendly analytics pipeline, a multiplayer trivia game on AWS, and a multithreaded CPU scheduler.',
   internshipDates: 'June 2023 – May 2024',
   internshipLocation: 'Laurel, MD',
   interests: 'I enjoy watching soccer and football, playing basketball, doing puzzles, and listening to music.',
@@ -30,7 +30,7 @@ export const profile = {
   github: 'https://github.com/gabrieldcruz',
   linkedin: 'https://www.linkedin.com/in/gcruz38/',
   email: 'gabriel.david.cruz12@gmail.com',
-  resume: '', // Add a file to static/resume.pdf, then set this to '/resume.pdf'.
+  resume: '/resumes/software-resume.pdf',
 };
 
 export const options: OptionValue[] = [
@@ -67,20 +67,23 @@ export interface Project {
 export const projects: Project[] = [
   { id: 'aimockinterviewer', name: 'AI Mock Interviewer', category: '', stack: [], summary: 'AI interview practice with résumé-based questions, voice conversations, and feedback tailored to a target role.', features: [], github: 'https://github.com/gabrieldcruz/aimockinterviewer' },
   { id: 'breastcancersurvival', name: 'Breast Cancer Survival', category: '', stack: [], summary: 'Survival model research using clinical and genomic data, with risk predictions and feature explanations.', features: [], github: 'https://github.com/gabrieldcruz/breastcancersurvival' },
+  { id: 'cosmillion', name: 'Cosmillion', category: '', stack: [], summary: 'Multiplayer space trivia game where rarer answers burn more fuel, with party rooms, a daily challenge, and leaderboards.', features: [], demo: 'https://d3tum0frazkwn7.cloudfront.net' },
+  { id: 'cpu-scheduler', name: 'Multithreaded CPU Scheduler', category: '', stack: [], summary: 'FCFS, Round Robin, SRTF, and preemptive priority schedulers for a multiprocessor OS simulator, one thread per CPU.', features: [] },
   { id: 'claudehackathon', name: 'Fridge Food Detector', category: '', stack: [], summary: 'Turn fridge photos into ingredient lists and recipe ideas, with pantry, grocery, and nutrition tools.', features: [], github: 'https://github.com/gabrieldcruz/claudehackathon' },
   { id: 'international-football-prediction', name: 'International Football Prediction', category: '', stack: [], summary: 'Predict international match outcomes using machine learning, rankings, recent form, and head-to-head results.', features: [], github: 'https://github.com/gabrieldcruz/International-Football-Prediction' },
   { id: 'matrix-multiplication', name: 'Matrix Multiplication', category: '', stack: [], summary: 'Compare standard and cache-blocked matrix multiplication in C++ with timing and performance benchmarks.', features: [], github: 'https://github.com/gabrieldcruz/Matrix-Multiplication' },
   { id: 'moviesstore', name: 'Movies Store', category: '', stack: [], summary: 'Django movie storefront with search, reviews, a cart, order history, and voting on requested movies.', features: [], github: 'https://github.com/gabrieldcruz/moviesstore' },
   { id: 'option-pricer', name: 'Option Pricer', category: '', stack: [], summary: 'Compare four European option pricing models in C++, with parallel Monte Carlo simulations and CSV exports.', features: [], github: 'https://github.com/gabrieldcruz/Option-Pricer' },
   { id: 'pairs-trading', name: 'Pairs Trading', category: '', stack: [], summary: 'Python stock-pair research using correlation, cointegration tests, spread signals, and historical backtesting.', features: [], github: 'https://github.com/gabrieldcruz/Pairs-Trading' },
-  { id: 'personalwebsite', name: 'Personal Website', category: '', stack: [], summary: 'A Persona-inspired Svelte portfolio with keyboard navigation, responsive layouts, and audio and motion controls.', features: [], github: 'https://github.com/gabrieldcruz/PersonalWebsite' },
+  { id: 'personalwebsite', name: 'Personal Website', category: '', stack: [], summary: 'A Persona-inspired SvelteKit portfolio with typed project case studies, keyboard navigation, and synthesized menu audio.', features: [], github: 'https://github.com/gabrieldcruz/PersonalWebsite' },
+  { id: 'wisp', name: 'Wisp', category: '', stack: [], summary: 'Cookie-free web analytics: a ~1 KB tracker, a Spring Boot ingest API on Redis, ClickHouse rollups, and a React dashboard.', features: [] },
   { id: 'wayfinder', name: 'Wayfinder', category: '', stack: [], summary: 'Arduino smart cane with ultrasonic obstacle detection, distance-based audio alerts, and Telegram SOS messages.', features: [], github: 'https://github.com/gabrieldcruz/wayfinder' },
 ].map(project => ({ ...project, ...projectDetails[project.id] }))
   .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
 
 export const skillGroups = [
-  { name: 'Programming', note: 'Core languages', items: ['Python', 'C++', 'Java'] },
-  { name: 'Web & data', note: 'Applications and analysis', items: ['Django', 'SQL', 'Pandas', 'NumPy', 'REST APIs'] },
+  { name: 'Programming', note: 'Core languages', items: ['Java', 'Python', 'C', 'C++', 'TypeScript', 'SQL'] },
+  { name: 'Backend & data', note: 'Applications and infrastructure', items: ['Spring Boot', 'Django', 'PostgreSQL', 'ClickHouse', 'Redis', 'Docker', 'AWS'] },
   { name: 'Hardware', note: 'Beyond the screen', items: ['ESP32', 'Arduino', 'VHDL', 'Quartus'] },
 ];
 
